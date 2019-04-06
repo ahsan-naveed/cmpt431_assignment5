@@ -1,5 +1,5 @@
 const zmq = require("zeromq");
-const protobuf = require("sawtooth-sdk/protobuf");
+const { protobuf } = require("sawtooth-sdk");
 
 const {
   Message,
