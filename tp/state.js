@@ -25,10 +25,10 @@ class NotaryState {
     return this.context
       .setState(stateEntriesSend, this.timeout)
       .then(function(result) {
-        console.log("Success", result);
+        console.log("TXN COMMITTED: ", result);
       })
       .catch(function(error) {
-        console.error("Error", error);
+        console.error("TXN NOT COMMITTED", error);
       });
   }
 
