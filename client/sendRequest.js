@@ -9,6 +9,7 @@ const privateKey = context.newRandomPrivateKey();
 const signer = new CryptoFactory(context).newSigner(privateKey);
 
 const TP_NAMESPACE = "58504b";
+const SIGNER_PUB_KEY = signer.getPublicKey().asHex();
 
 function sendRequest(payload) {
   const payloadBytes = cbor.encode(payload);
@@ -17,8 +18,8 @@ function sendRequest(payload) {
     familyVersion: "1.0",
     inputs: [TP_NAMESPACE],
     outputs: [TP_NAMESPACE],
-    signerPublicKey: signer.getPublicKey().asHex(),
-    batcherPublicKey: signer.getPublicKey().asHex(),
+    signerPublicKey: SIGNER_PUB_KEY,
+    batcherPublicKey: SIGNER_PUB_KEY,
     dependencies: [],
     payloadSha512: createHash("sha512")
       .update(payloadBytes)
@@ -37,7 +38,7 @@ function sendRequest(payload) {
   const transactions = [transaction];
 
   const batchHeaderBytes = protobuf.BatchHeader.encode({
-    signerPublicKey: signer.getPublicKey().asHex(),
+    signerPublicKey: SIGNER_PUB_KEY,
     transactionIds: transactions.map(txn => txn.headerSignature)
   }).finish();
 
@@ -69,11 +70,3 @@ function sendRequest(payload) {
 var args = process.argv;
 var payload = JSON.parse(args[2]);
 sendRequest(payload);
-
-/**
- * Client applications can subscribe to Hyperledger Sawtooth events using ZMQ and Protobuf messages. The general process is:
- * 1. Construct a subscription that includes the event type and any filters
- * 2. Submit the event subscription as a message to the validator
- * 3. Wait for a response from the validator
- * 4. Start listening for events
- */

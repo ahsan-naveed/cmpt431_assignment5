@@ -21,6 +21,7 @@ class NotaryState {
     var stateEntriesSend = {};
 
     stateEntriesSend[address] = value;
+
     return this.context
       .setState(stateEntriesSend, this.timeout)
       .then(function(result) {
